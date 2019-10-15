@@ -41,7 +41,7 @@ EnableGzip=true
 StaticExtensionsToGzip = .css, .js, .xml
 
 #站点地图host（主要用于使用CDN的时候，host与实际host不一样，导致生成的sitemap不一样）
-sitemap_host="${BOOKSTACK_SITEMAP_HOST||${BOOKSTACK_STATIC_DOMAIN}" 
+sitemap_host="${BOOKSTACK_DOMAIN||${BOOKSTACK_STATIC_DOMAIN}" 
 
 # 默认Session生成Key的秘钥
 beegoserversessionkey=bookstack
