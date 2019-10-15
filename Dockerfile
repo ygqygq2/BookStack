@@ -1,6 +1,16 @@
+FROM golang:1.13.1 AS build
+
+ENV VERSION=v2.1
+
+WORKDIR /usr/src/myapp
+COPY . .
+
+# 编译
+RUN /bin/sh build.sh ${VERSION}
+
 FROM ubuntu:16.04
 
-MAINTAINER "TruthHun <TruthHun@QQ.COM>"
+LABEL maintainer "29ygq@sina.com"
 
 # 安装依赖
 RUN apt update -y \
@@ -16,6 +26,7 @@ ENV LANG en_US.utf8
 
 # 将程序拷贝进去
 COPY . /www/BookStack/
+COPY build:/usr/src/myapp/output/linux/BookStack /www/BookStack/
 
 # 将程序拷贝进去
 COPY lib/time/zoneinfo.zip /usr/local/go/lib/time/
