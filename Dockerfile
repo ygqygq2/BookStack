@@ -1,4 +1,4 @@
-FROM golang:1.13.1 AS build
+FROM golang:1.13.1 AS builder
 
 ENV VERSION=v2.1
 
@@ -6,7 +6,7 @@ WORKDIR /usr/src/myapp
 COPY . .
 
 # 编译
-RUN /bin/sh build.sh ${VERSION}
+RUN /bin/bash build.sh ${VERSION}
 
 FROM ubuntu:16.04
 
@@ -20,13 +20,14 @@ RUN apt update -y \
     && apt update -y \
     && apt install -y fonts-wqy-zenhei fonts-wqy-microhei \
     && apt install -y xdg-utils wget xz-utils python chromium-browser \
+    && rm -rf /var/lib/apt/lists/* \
     && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh /dev/stdin
 
 ENV LANG en_US.utf8
 
 # 将程序拷贝进去
 COPY . /www/BookStack/
-COPY build:/usr/src/myapp/output/linux/BookStack /www/BookStack/
+COPY --from=builder /usr/src/myapp/output/linux/BookStack /www/BookStack/
 
 # 将程序拷贝进去
 COPY lib/time/zoneinfo.zip /usr/local/go/lib/time/
